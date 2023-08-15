@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Random Email Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            text-align: center;
+            width: 400px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        p {
+            font-size: 18px;
+            margin-top: 20px;
+            word-wrap: break-word;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+
+        .copy-button {
+            background-color: #2ecc71;
+        }
+
+        .copy-button:hover {
+            background-color: #27ae60;
+        }
+
+        .copy-success {
+            color: #2ecc71;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="toast" id="copySuccessToast">Copied to clipboard!</div>
+
+    <div class="container">
+        <h2>Random Email Generator</h2>
+        <div class="email-generator">
+            <button id="sponsorButton">Generate Sponsor Email</button>
+            <p id="sponsorEmail"></p>
+            <button id="sponsorCopyButton" class="copy-button" style="display: none;">Copy</button>
+            <span class="copy-success" id="sponsorCopySuccess">Copied!</span>
+        </div>
+        <div class="email-generator">
+            <button id="targetButton">Generate Target Email</button>
+            <p id="targetEmail"></p>
+            <button id="targetCopyButton" class="copy-button" style="display: none;">Copy</button>
+            <span class="copy-success" id="targetCopySuccess">Copied!</span>
+        </div>
+    </div>
+
+    <script>
+        function generateRandomString(length) {
+            const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let randomString = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                randomString += characters[randomIndex];
+            }
+            return randomString;
+        }
+
+        function generateRandomEmail(prefix) {
+            const randomString = generateRandomString(6);
+            const domain = 'yopmail.com';
+            return `${prefix}${randomString}@${domain}`;
+        }
+
+       function showCopySuccessToast() {
+            const toast = document.getElementById('copySuccessToast');
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2000); // Hiển thị toast trong 2 giây và sau đó ẩn nó
+        }
+
+        function copyToClipboard(text) {
+            const tempElement = document.createElement('textarea');
+            tempElement.value = text;
+            document.body.appendChild(tempElement);
+            tempElement.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempElement);
+            showCopySuccessMessage();
+        }
+
+        const sponsorButton = document.getElementById('sponsorButton');
+        const sponsorEmailElement = document.getElementById('sponsorEmail');
+        const sponsorCopyButton = document.getElementById('sponsorCopyButton');
+
+        sponsorButton.addEventListener('click', () => {
+            const randomSponsorEmail = generateRandomEmail('sponsor');
+            sponsorEmailElement.textContent = randomSponsorEmail;
+            sponsorCopyButton.style.display = 'block';
+        });
+
+        sponsorCopyButton.addEventListener('click', () => {
+            const emailToCopy = sponsorEmailElement.textContent;
+            copyToClipboard(emailToCopy);
+        });
+
+        const targetButton = document.getElementById('targetButton');
+        const targetEmailElement = document.getElementById('targetEmail');
+        const targetCopyButton = document.getElementById('targetCopyButton');
+
+        targetButton.addEventListener('click', () => {
+            const randomTargetEmail = generateRandomEmail('target');
+            targetEmailElement.textContent = randomTargetEmail;
+            targetCopyButton.style.display = 'block';
+        });
+
+        targetCopyButton.addEventListener('click', () => {
+            const emailToCopy = targetEmailElement.textContent;
+            copyToClipboard(emailToCopy);
+        });
+    </script>
+</body>
+
+</html>
